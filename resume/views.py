@@ -1,15 +1,11 @@
 from django.shortcuts import render
 from resume.models import Visitor
 
+from django.views.decorators.cache import cache_page
+
 
 # Create your views here.
-
+# 缓存30天
+@cache_page(60 * 60 * 24 * 30)
 def index(request):
-    ip = False
-    if 'HTTP_X_FORWARDED_FOR' in request.META:
-        ip = request.META['HTTP_X_FORWARDED_FOR']
-    elif 'REMOTE_ADDR' in request.META:
-        ip = request.META['REMOTE_ADDR']
-    if ip:
-        Visitor.objects.create(ip=ip)
     return render(request, 'index.html')
